@@ -179,6 +179,7 @@ function ayuda {
     Write-Host "  matrix   - Efecto Matrix"
     Write-Host "  reboot   - Reiniciar PC"
     Write-Host "  apagar   - Apagar PC"
+    Write-Host "  radio   - Emisoras Dominicanas en Vivo"
     Write-Host "==========================================================" -ForegroundColor Cyan
 }
 
@@ -210,4 +211,71 @@ function subir {
     git push
     
     Write-Host "--- PERFIL RESPALDADO EN GITHUB EXITOSAMENTE ---" -ForegroundColor Green
+}
+
+function radio {
+    $Emisoras = [ordered]@{
+        "1"  = @{ Nombre = "Fuego 90 La Salsera"; Url = "https://radiordomi.com/8390/stream/1/" }
+        "2"  = @{ Nombre = "LATIDO";             Url = "https://rstream.hostdime.com/proxy/latidos?mp=/8880" }
+        "3"  = @{ Nombre = "LA KALLE";           Url = "https://radio.telemicro.com.do/lakallesantiago" }
+        "4"  = @{ Nombre = "K Q 94.5";           Url = "https://radio.yaservers.com:9990/stream/1/" }
+        "5"  = @{ Nombre = "MIX 104.5";          Url = "https://radiordomi.com:8608/stream/1/" }
+        "6"  = @{ Nombre = "CIMA 100.5";         Url = "https://sonicpanel.streaming10.net/8146/stream/1/" }
+        "7"  = @{ Nombre = "SUPER K";            Url = "https://sonic.radiostreaminglatino.com/8298/stream/1/" }
+        "8"  = @{ Nombre = "TOP LATINA 101.7";   Url = "https://stream.zeno.fm/rprhbqiwozovv" }
+        "9"  = @{ Nombre = "CALIENTE 104.1";     Url = "https://stream.zeno.fm/2wr9tlnoomqtv" }
+        "10" = @{ Nombre = "TROPICAL SALSA";     Url = "https://stream.zeno.fm/2wr9tlnoomqtv" }
+        "11" = @{ Nombre = "ZOL 106.5 FM";       Url = "https://stream.zeno.fm/w6x7q7dtpy5tv" }
+        "12" = @{ Nombre = "ALOFOKE 99.3 FM";    Url = "https://radiordomi.com/8566/stream" }
+        "13" = @{ Nombre = "MORTAL";             Url = "https://radio.telemicro.com.do/mortal104" }
+        "14" = @{ Nombre = "RAICES";             Url = "https://radiordomi.com/8680/stream/1/" }
+        "15" = @{ Nombre = "Z 101";              Url = "https://27383.live.streamtheworld.com/Z101FM_SC" }
+        "16" = @{ Nombre = "RUMBA";              Url = "https://stream.zeno.fm/eticl2rpposvv" }
+        "17" = @{ Nombre = "DISCO 106";          Url = "https://radiordomi.com:8118/stream/1/" }
+    }
+
+    $EmisoraActual = "Radio Apagada"
+    $Reproduciendo = $false
+
+    while ($true) {
+        Clear-Host
+        Write-Host "      __________________________" -ForegroundColor Gray
+        Write-Host "     |  ______________________  |" -ForegroundColor Gray
+        Write-Host "     | | CARLOS RADIO RD      | |" -ForegroundColor Cyan
+        Write-Host "     | |______________________| |" -ForegroundColor Gray
+        Write-Host "     |    ___          ______   |" -ForegroundColor Gray
+        Write-Host "     |   /   \  ( o )  |    |   |" -ForegroundColor Gray
+        Write-Host "     |   \___/         |____|   |" -ForegroundColor Gray
+        Write-Host "     |__________________________|" -ForegroundColor Gray
+        
+        Write-Host "`n==============================================" -ForegroundColor Yellow
+        Write-Host " ESCUCHANDO: " -NoNewline
+        Write-Host $EmisoraActual -ForegroundColor Green -BackgroundColor Black
+        Write-Host "==============================================" -ForegroundColor Yellow
+        
+        if ($Reproduciendo) {
+            Write-Host "   >>> REPRODUCIENDO AUDIO ACTIVO <<<" -ForegroundColor Cyan
+        }
+
+        Write-Host "`n--- Emisoras Disponibles ---" -ForegroundColor White
+        foreach ($key in $Emisoras.Keys) {
+            Write-Host "$key) $($Emisoras[$key].Nombre)"
+        }
+        
+        Write-Host "`nEscribe el numero o 'q' para salir:" -ForegroundColor Yellow
+        $Opcion = Read-Host
+        
+        if ($Opcion -eq 'q') {
+            Stop-Process -Name "mpv" -ErrorAction SilentlyContinue
+            break
+        }
+
+        if ($Emisoras.Contains($Opcion)) {
+            Stop-Process -Name "mpv" -ErrorAction SilentlyContinue
+            $Seleccion = $Emisoras[$Opcion]
+            $EmisoraActual = $Seleccion.Nombre
+            $Reproduciendo = $true
+            Start-Process "mpv" -ArgumentList $Seleccion.Url, "--no-video" -WindowStyle Hidden
+        }
+    }
 }
