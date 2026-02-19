@@ -197,3 +197,17 @@ function apagar {
 Clear-Host
 Show-Banner
 ayuda
+
+function subir {
+    # Guardamos los cambios actuales
+    git add .
+    
+    # Creamos un mensaje con la fecha y hora actual
+    $fecha = Get-Date -Format "dd/MM/yyyy HH:mm"
+    git commit -m "Actualización del perfil: $fecha"
+    
+    # Lo enviamos a GitHub
+    git push
+    
+    Write-Host "--- PERFIL RESPALDADO EN GITHUB EXITOSAMENTE ---" -ForegroundColor Green
+}
