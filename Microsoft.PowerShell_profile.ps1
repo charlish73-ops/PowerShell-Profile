@@ -361,3 +361,15 @@ while ($true) {
     }
 }
 }
+
+# --- CONFIGURACIÓN DE AUTOCOMPLETADO PRO ---
+Import-Module PSReadLine
+
+# 1. Activa sugerencias basadas en lo que has escrito antes (Historial)
+Set-PSReadLineOption -PredictionSource History
+
+# 2. Muestra la sugerencia en texto gris tenue (Estilo Inline)
+Set-PSReadLineOption -PredictionViewStyle InlineView
+
+# 3. Mejora el comportamiento de la tecla TAB para que muestre un menú
+Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
