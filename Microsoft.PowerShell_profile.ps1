@@ -204,7 +204,7 @@ function subir {
     $currentPath = Get-Location
     
     # Vamos a la carpeta donde SÍ está el repositorio de Git
-    cd "$HOME\OneDrive\Documentos\WindowsPowerShell"
+    cd "$HOME\Documents\PowerShell"
     
     # Ejecutamos los comandos de Git
     git add .
